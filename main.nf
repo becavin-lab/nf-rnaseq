@@ -51,8 +51,8 @@ process mapping {
     set pair_id, "accepted_hits.bam" into bam_ch
   
     """
-    tophat2 -p ${task.cpus} --GTF $annot genome.index $reads
-    mv tophat_out/accepted_hits.bam .
+    bowtie2 -p ${task.cpus} -x genome.index -U $reads -b accepted_hits.bam
+    #mv tophat_out/accepted_hits.bam .
     """
 }
    
