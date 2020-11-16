@@ -4,6 +4,7 @@
  * Defines some parameters in order to specify the refence genomes
  * and read pairs by using the command line options
  */
+
 params.reads = "$baseDir/data/ggal/*_{1,2}.fq"
 params.annot = "$baseDir/data/ggal/ggal_1_48850000_49020000.bed.gff"
 params.genome = "$baseDir/data/ggal/ggal_1_48850000_49020000.Ggal71.500bpflank.fa"
@@ -17,7 +18,8 @@ Channel
     .fromFilePairs( params.reads )
     .ifEmpty { error "Cannot find any reads matching: ${params.reads}" }
     .set { read_pairs_ch }
-  
+
+
 /*
  * Step 1. Builds the genome index required by the mapping process
  */
@@ -60,6 +62,7 @@ process mapping {
  * Step 3. Assembles the transcript by using the "cufflinks" tool
  */
 process makeTranscript {
+    echo true
     tag "$pair_id"
     publishDir params.outdir, mode: 'copy' 
         
@@ -71,7 +74,7 @@ process makeTranscript {
     tuple val(pair_id), path('transcript_*.gtf')
   
     """
-    cufflinks --no-update-check -q -p $task.cpus -G $annot $bam_file
-    mv transcripts.gtf transcript_${pair_id}.gtf
+    echo cufflinks --no-update-check -q -p $task.cpus -G $annot $bam_file
+    echo mv transcripts.gtf transcript_${pair_id}.gtf
     """
 }
