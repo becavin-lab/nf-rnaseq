@@ -70,9 +70,7 @@ process makeTranscript {
     path annot from params.annot
     tuple val(pair_id), path(bam_file) from bam_ch
       
-    output:
-    tuple val(pair_id), path('transcript_*.gtf')
-  
+    
     """
     echo cufflinks --no-update-check -q -p $task.cpus -G $annot $bam_file
     echo mv transcripts.gtf transcript_${pair_id}.gtf
